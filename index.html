@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<!-- Defaulting to English, will be updated by JS -->
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- The title will be set by JavaScript -->
+    <title>Digital Business Card - Marwan Elmoghazy</title>
+    
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Google Fonts: Inter (for English) and Cairo (for Arabic) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Default font */
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Add a subtle texture to the background for desktop */
+            background-color: #f0f2f5;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d4d4d8' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        
+        /* Apply Cairo font when the language is Arabic */
+        html[lang="ar"] body {
+            font-family: 'Cairo', sans-serif;
+        }
+
+        /* Dark mode background */
+        body.dark {
+             background-color: #111827;
+             background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23374151' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        /* Smooth transition for color properties */
+        * {
+            transition: color 300ms ease-in-out, background-color 300ms ease-in-out;
+        }
+
+        /* Responsive iPhone Bezel Styles */
+        .iphone-bezel {
+            width: 100%;
+            max-width: 410px; /* Max width for desktop */
+            height: 90vh;
+            max-height: 840px; /* Max height for desktop */
+            padding: 12px;
+            background: #111;
+            border-radius: 54px;
+            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5), inset 0 0 0 2px #333, inset 0 0 0 6px #999;
+            position: relative;
+            display: flex; /* Use flexbox to manage inner content */
+            flex-direction: column;
+        }
+
+        .iphone-screen {
+            background: #fff;
+            border-radius: 42px;
+            position: relative;
+            overflow: hidden;
+            height: 100%;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .dark .iphone-screen {
+            background: #000;
+        }
+
+        /* Home Indicator Bar */
+        .iphone-home-indicator {
+            position: absolute;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 135px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 10px;
+            z-index: 100;
+        }
+        
+        /* Animation Setup */
+        .initial-hidden { opacity: 0; }
+        .scale-in { transform: scale(0.95); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+        .fade-in-up { transform: translateY(20px); transition: opacity 0.5s ease-out, transform 0.5s ease-out; }
+        .is-visible { opacity: 1; transform: none; }
+
+        /* Skeleton Loader Styles */
+        .skeleton {
+            background-color: #e2e8f0; /* Light mode skeleton color */
+            position: relative;
+            overflow: hidden;
+        }
+        .dark .skeleton {
+            background-color: #374151; /* Dark mode skeleton color */
+        }
+        .skeleton::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -150%;
+            width: 150%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            animation: shimmer 1.5s infinite;
+        }
+        .dark .skeleton::after {
+             background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+        }
+        @keyframes shimmer {
+            100% {
+                left: 150%;
+            }
+        }
+        
+        /* Style for active language flag */
+        .lang-active {
+            box-shadow: 0 0 0 3px #3b82f6; /* Blue ring */
+        }
+    </style>
+    <script>
+        // Custom configuration for Tailwind CSS
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        cairo: ['Cairo', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 flex items-center justify-center min-h-screen p-4 overflow-hidden">
+
+    <!-- Language Switcher -->
+    <div id="language-switcher" class="fixed top-4 left-4 z-50 flex gap-3 initial-hidden fade-in-up">
+        <button id="lang-en" class="haptic-feedback p-0 bg-transparent border-0 rounded-full">
+            <img src="https://flagcdn.com/w40/us.png" alt="English" class="w-8 h-8 rounded-full object-cover">
+        </button>
+        <button id="lang-ar" class="haptic-feedback p-0 bg-transparent border-0 rounded-full">
+             <img src="https://flagcdn.com/w40/eg.png" alt="Arabic" class="w-8 h-8 rounded-full object-cover">
+        </button>
+    </div>
+
+    <!-- Theme Switcher -->
+    <div id="theme-switcher" class="fixed top-4 right-4 z-50 initial-hidden fade-in-up">
+        <label for="theme-toggle" class="flex items-center cursor-pointer">
+            <div class="relative">
+                <input type="checkbox" id="theme-toggle" class="sr-only">
+                <div class="block bg-gray-300 dark:bg-gray-700 w-14 h-8 rounded-full"></div>
+                <div class="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full" style="transition: transform 300ms ease;">
+                    <i class="fa-solid fa-sun text-yellow-500 absolute inset-0 flex items-center justify-center"></i>
+                    <i class="fa-solid fa-moon text-gray-800 absolute inset-0 flex items-center justify-center opacity-0"></i>
+                </div>
+            </div>
+        </label>
+    </div>
+
+    <!-- iPhone Frame -->
+    <div class="iphone-bezel initial-hidden scale-in">
+        <div class="iphone-screen">
+            <!-- Status Bar & Notch Container -->
+            <div class="absolute top-0 left-0 right-0 h-11 px-6 flex justify-between items-center z-30 flex-shrink-0">
+                <!-- Left Side: Time (Now Live!) -->
+                <div id="live-time" class="anim-item w-14 text-left font-semibold text-gray-900 dark:text-white initial-hidden fade-in-up" style="animation-delay: 200ms;">
+                    9:41
+                </div>
+
+                <!-- Center: Realistic Notch -->
+                <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[160px] h-[30px] bg-black rounded-b-2xl flex items-center justify-center gap-x-4 px-2">
+                    <div class="w-12 h-1.5 bg-gray-800 rounded-full"></div>
+                    <div class="w-2 h-2 bg-gradient-to-tr from-gray-700 to-gray-600 rounded-full"></div>
+                </div>
+
+                <!-- Right Side: Icons -->
+                <div class="anim-item flex gap-1.5 items-center font-semibold text-gray-900 dark:text-white initial-hidden fade-in-up" style="animation-delay: 200ms;">
+                    <i class="fa-solid fa-signal"></i>
+                    <i class="fa-solid fa-wifi"></i>
+                    <i class="fa-solid fa-battery-full"></i>
+                </div>
+            </div>
+
+            <!-- Main Card Container (Scrollable) -->
+            <div id="card-content" class="h-full w-full overflow-y-auto bg-white dark:bg-black">
+                <!-- Header Section -->
+                <div class="relative mt-11"> 
+                    <div class="mx-4 relative">
+                        <div class="rounded-2xl overflow-hidden">
+                            <img 
+                                id="cover-image"
+                                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxskVh9PdmWDVPgBkvIKWdzW9SWLyQKDB2huluwSRVxh6ZkMKro8Q6Wek&s=10" 
+                                alt="Abstract blue and orange painting" 
+                                class="skeleton anim-item w-full h-36 object-cover initial-hidden scale-in"
+                                onerror="this.onerror=null;this.src='https://placehold.co/600x250/3b82f6/f97316?text=Cover+Image';">
+                        </div>
+                        <div class="anim-item absolute top-3 right-3 initial-hidden fade-in-up" dir="ltr">
+                            <div class="relative">
+                                <button id="options-button" class="bg-black/40 text-white w-8 h-8 rounded-lg backdrop-blur-sm haptic-feedback">
+                                    <i class="fa-solid fa-ellipsis"></i>
+                                </button>
+                                <div id="options-menu" class="hidden absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-xl z-50 ring-1 ring-black ring-opacity-5">
+                                    <!-- New "Copy Link" button -->
+                                    <button id="copy-link-button" data-lang-key="copyLink" class="flex items-center gap-3 w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-t-lg haptic-feedback">
+                                        <i class="fa-solid fa-link w-4"></i>
+                                        <span>Copy Link</span>
+                                    </button>
+                                    <!-- The "Share Profile" button now only handles the native share dialog -->
+                                    <button id="share-button" data-lang-key="shareProfile" class="flex items-center gap-3 w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-b-lg haptic-feedback">
+                                        <i class="fa-solid fa-share-nodes w-4"></i>
+                                        <span>Share Profile</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="anim-item absolute -bottom-12 left-1/2 -translate-x-1/2 initial-hidden scale-in">
+                        <img 
+                            id="profile-image"
+                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQergW4vgujqcfkbQWElV_wTu-XBBQzEyIkDCs4bpXLGpfqBX1u7pqWE6IO&s=10" 
+                            alt="Profile picture of Marwan Elmoghazy"
+                            class="skeleton w-24 h-24 rounded-full object-cover border-4 border-white dark:border-black"
+                            onerror="this.onerror=null;this.src='https://placehold.co/100x100/EFEFEF/333333?text=AA';">
+                    </div>
+                </div>
+
+                <!-- Info Section -->
+                <div class="anim-item pt-16 pb-6 px-6 text-center initial-hidden fade-in-up">
+                    <h1 data-lang-key="name" class="text-2xl font-bold text-gray-800 dark:text-white flex items-center justify-center gap-2">
+                        Marwan Elmoghazy
+                        <i class="fa-solid fa-circle-check text-blue-500 text-xl"></i>
+                    </h1>
+                    <p data-lang-key="jobTitle" class="text-gray-500 dark:text-gray-400 mt-1">Software Engineer</p>
+                </div>
+
+                <!-- Contact Action Icons -->
+                <div class="anim-item flex justify-center gap-4 px-6 initial-hidden fade-in-up">
+                    <a href="tel:+201234567890" class="haptic-feedback w-12 h-12 flex items-center justify-center bg-gray-100 dark:bg-gray-800 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"><i class="fa-solid fa-phone text-xl"></i></a>
+                    <a href="mailto:hello@marwan.com" class="haptic-feedback w-12 h-12 flex items-center justify-center bg-gray-100 dark:bg-gray-800 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"><i class="fa-solid fa-envelope text-xl"></i></a>
+                    <a href="https://marwan.com" target="_blank" class="haptic-feedback w-12 h-12 flex items-center justify-center bg-gray-100 dark:bg-gray-800 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"><i class="fa-solid fa-link text-xl"></i></a>
+                </div>
+
+                <!-- Save Contact Button -->
+                <div class="anim-item px-6 pt-6 pb-4 initial-hidden fade-in-up">
+                    <button id="save-contact-button" data-lang-key="saveContact" class="haptic-feedback w-full bg-gray-900 dark:bg-white text-white dark:text-black font-semibold py-3 rounded-xl hover:bg-gray-800 dark:hover:bg-gray-200">Save Contact</button>
+                </div>
+
+                <!-- Social Media Links -->
+                <div class="grid grid-cols-3 gap-4 p-6 pt-2">
+                    <a href="https://www.instagram.com/" target="_blank" class="haptic-feedback anim-item text-center group initial-hidden fade-in-up"><div class="w-16 h-16 mx-auto bg-gray-100 dark:bg-gray-800 rounded-2xl flex items-center justify-center"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram" class="h-8 w-8"></div><p data-lang-key="instagram" class="text-sm mt-2 text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white">Instagram</p></a>
+                    <a href="https://wa.me/201234567890" target="_blank" class="haptic-feedback anim-item text-center group initial-hidden fade-in-up"><div class="w-16 h-16 mx-auto bg-gray-100 dark:bg-gray-800 rounded-2xl flex items-center justify-center"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" class="h-9 w-9"></div><p data-lang-key="whatsapp" class="text-sm mt-2 text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white">WhatsApp</p></a>
+                                        <a href="https://www.facebook.com/" target="_blank" class="haptic-feedback anim-item text-center group initial-hidden fade-in-up"><div class="w-16 h-16 mx-auto bg-gray-100 dark:bg-gray-800 rounded-2xl flex items-center justify-center"><i class="fa-brands fa-facebook-f text-3xl text-blue-600"></i></div><p data-lang-key="facebook" class="text-sm mt-2 text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white">Facebook</p></a>
+                    <a href="https://www.tiktok.com/" target="_blank" class="haptic-feedback anim-item text-center group initial-hidden fade-in-up"><div class="w-16 h-16 mx-auto bg-gray-100 dark:bg-gray-800 rounded-2xl flex items-center justify-center"><img src="https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/tiktok-color-icon.png" alt="TikTok" class="h-8 w-8 dark:invert"></div><p data-lang-key="tiktok" class="text-sm mt-2 text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white">TikTok</p></a>
+                    <a href="https://www.linkedin.com/in/" target="_blank" class="haptic-feedback anim-item text-center group initial-hidden fade-in-up"><div class="w-16 h-16 mx-auto bg-gray-100 dark:bg-gray-800 rounded-2xl flex items-center justify-center"><img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" class="h-8 w-8"></div><p data-lang-key="linkedin" class="text-sm mt-2 text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white">LinkedIn</p></a>
+                    <a href="https://www.youtube.com/" target="_blank" class="haptic-feedback anim-item text-center group initial-hidden fade-in-up"><div class="w-16 h-16 mx-auto bg-gray-100 dark:bg-gray-800 rounded-2xl flex items-center justify-center"><img src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg" alt="YouTube" class="h-7 w-auto"></div><p data-lang-key="youtube" class="text-sm mt-2 text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white">YouTube</p></a>
+                </div>
+                <div id="toast" class="fixed bottom-20 left-1/2 -translate-x-1/2 bg-gray-800 text-white px-4 py-2 rounded-lg shadow-lg opacity-0 transition-opacity duration-300 z-50">
+                    <!-- Toast message is set by JS -->
+                </div>
+            </div>
+        </div>
+        
+        <div class="iphone-home-indicator"></div>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const htmlElement = document.documentElement;
+            const bodyElement = document.body;
+            
+            // Define elements that will be animated
+            const animatedItems = document.querySelectorAll('.anim-item');
+            const languageSwitcher = document.getElementById('language-switcher');
+            const themeSwitcher = document.getElementById('theme-switcher');
+
+            // --- REUSABLE ANIMATION FUNCTIONS ---
+            function animateOut() {
+                // Animate main content
+                animatedItems.forEach(item => item.classList.remove('is-visible'));
+                // Animate corner controls
+                languageSwitcher.classList.remove('is-visible');
+                themeSwitcher.classList.remove('is-visible');
+            }
+
+            function animateIn(isInitialLoad = false) {
+                // Animate corner controls
+                // On initial load, they use their default delay. On language switch, they appear faster.
+                const controlDelay = isInitialLoad ? 800 : 100;
+                setTimeout(() => {
+                    languageSwitcher.classList.add('is-visible');
+                    themeSwitcher.classList.add('is-visible');
+                }, controlDelay);
+
+                // Animate main content
+                let delay = isInitialLoad ? 400 : 100;
+                animatedItems.forEach(item => {
+                    const itemDelay = isInitialLoad ? (parseInt(item.style.animationDelay) || delay) : delay;
+                    setTimeout(() => {
+                        item.classList.add('is-visible');
+                    }, itemDelay);
+                    delay += 75; 
+                });
+            }
+
+            // --- LANGUAGE TOGGLE ---
+            const translations = {
+                "pageTitle": { "en": "Digital Business Card - Marwan Elmoghazy", "ar": "بطاقة عمل رقمية - مروان المغازي" },
+                "name": { "en": "Marwan Elmoghazy", "ar": "مروان المغازي" },
+                "jobTitle": { "en": "Software Engineer", "ar": "مهندس برمجيات" },
+                "saveContact": { "en": "Save Contact", "ar": "حفظ جهة الاتصال" },
+                "shareProfile": { "en": "Share Profile", "ar": "مشاركة الملف الشخصي" },
+                "copyLink": { "en": "Copy Link", "ar": "نسخ الرابط" },
+                "instagram": { "en": "Instagram", "ar": "انستغرام" },
+                "whatsapp": { "en": "WhatsApp", "ar": "واتساب" },
+                "tiktok": { "en": "TikTok", "ar": "تيك توك" },
+                "linkedin": { "en": "LinkedIn", "ar": "لينكد إن" },
+                "youtube": { "en": "YouTube", "ar": "يوتيوب" },
+                "facebook": { "en": "Facebook", "ar": "فيسبوك" },
+                "toastCopied": { "en": "Link copied to clipboard!", "ar": "تم نسخ الرابط إلى الحافظة!" },
+                "toastShared": { "en": "Shared successfully!", "ar": "تمت المشاركة بنجاح!" },
+                "toastCopyFailed": { "en": "Failed to copy link.", "ar": "فشل نسخ الرابط." }
+            };
+
+            const langEnButton = document.getElementById('lang-en');
+            const langArButton = document.getElementById('lang-ar');
+
+            function setLanguage(lang, isInitial = false) {
+                if (!isInitial && htmlElement.getAttribute('lang') === lang) return;
+                
+                const updateContent = () => {
+                    htmlElement.setAttribute('lang', lang);
+                    htmlElement.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+                    
+                    document.querySelectorAll('[data-lang-key]').forEach(element => {
+                        const key = element.getAttribute('data-lang-key');
+                        const target = element.querySelector('span') || element;
+                        if (translations[key] && translations[key][lang]) {
+                            target.textContent = translations[key][lang];
+                        }
+                    });
+
+                    document.title = translations.pageTitle[lang];
+
+                    if (lang === 'ar') {
+                        langArButton.classList.add('lang-active');
+                        langEnButton.classList.remove('lang-active');
+                        languageSwitcher.style.left = 'auto';
+                        languageSwitcher.style.right = '1rem';
+                        themeSwitcher.style.right = 'auto';
+                        themeSwitcher.style.left = '1rem';
+                    } else {
+                        langEnButton.classList.add('lang-active');
+                        langArButton.classList.remove('lang-active');
+                        languageSwitcher.style.left = '1rem';
+                        languageSwitcher.style.right = 'auto';
+                        themeSwitcher.style.right = '1rem';
+                        themeSwitcher.style.left = 'auto';
+                    }
+                    localStorage.setItem('language', lang);
+                };
+
+                if (isInitial) {
+                    updateContent();
+                } else {
+                    animateOut();
+                    setTimeout(() => {
+                        updateContent();
+                        animateIn();
+                    }, 500); // Match CSS transition time
+                }
+            }
+
+            langEnButton.addEventListener('click', () => setLanguage('en'));
+            langArButton.addEventListener('click', () => setLanguage('ar'));
+
+            // --- FEATURE 1: LIVE CLOCK (12-Hour Format) ---
+            const timeElement = document.getElementById('live-time');
+            function updateTime() {
+                const now = new Date();
+                let hours = now.getHours();
+                const minutes = String(now.getMinutes()).padStart(2, '0');
+                hours = hours % 12;
+                hours = hours ? hours : 12;
+                timeElement.textContent = `${hours}:${minutes}`;
+            }
+            updateTime();
+            setInterval(updateTime, 1000);
+
+            // --- FEATURE 2: HAPTIC FEEDBACK ---
+            function triggerHapticFeedback() {
+                if (navigator.vibrate) navigator.vibrate(10);
+            }
+            document.querySelectorAll('.haptic-feedback').forEach(el => {
+                el.addEventListener('click', triggerHapticFeedback);
+            });
+
+            // --- FEATURE 3: SAVE CONTACT (V-CARD) ---
+            const saveContactButton = document.getElementById('save-contact-button');
+            saveContactButton.addEventListener('click', () => {
+                const lang = localStorage.getItem('language') || 'en';
+                const contact = {
+                    name: translations.name[lang],
+                    title: translations.jobTitle[lang],
+                    phone: '+201234567890',
+                    email: 'hello@marwan.com',
+                    website: 'https://marwan.com',
+                };
+                const vCard = `BEGIN:VCARD
+VERSION:3.0
+FN;CHARSET=UTF-8:${contact.name}
+TITLE;CHARSET=UTF-8:${contact.title}
+TEL;TYPE=CELL:${contact.phone}
+EMAIL:${contact.email}
+URL:${contact.website}
+END:VCARD`;
+                const blob = new Blob([vCard], { type: 'text/vcard;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `Marwan_Elmoghazy.vcf`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            });
+
+            // --- FEATURE 4: SKELETON LOADERS ---
+            [document.getElementById('cover-image'), document.getElementById('profile-image')].forEach(img => {
+                const removeSkeleton = () => img.classList.remove('skeleton');
+                img.onload = removeSkeleton;
+                if (img.complete) removeSkeleton();
+            });
+
+            // --- EXISTING LOGIC (Theme, Menu, Animations) ---
+            const themeToggle = document.getElementById('theme-toggle');
+            const sunIcon = document.querySelector('.fa-sun');
+            const moonIcon = document.querySelector('.fa-moon');
+            const dot = document.querySelector('.dot');
+
+            function applyTheme(theme) {
+                if (theme === 'dark') {
+                    htmlElement.classList.add('dark');
+                    bodyElement.classList.add('dark');
+                    themeToggle.checked = true;
+                    sunIcon.classList.add('opacity-0');
+                    moonIcon.classList.remove('opacity-0');
+                    dot.style.transform = 'translateX(100%)';
+                } else {
+                    htmlElement.classList.remove('dark');
+                    bodyElement.classList.remove('dark');
+                    themeToggle.checked = false;
+                    sunIcon.classList.remove('opacity-0');
+                    moonIcon.classList.add('opacity-0');
+                    dot.style.transform = 'translateX(0)';
+                }
+            }
+            
+            themeToggle.addEventListener('change', () => {
+                const newTheme = themeToggle.checked ? 'dark' : 'light';
+                localStorage.setItem('theme', newTheme);
+                applyTheme(newTheme);
+            });
+            
+            const optionsButton = document.getElementById('options-button');
+            const optionsMenu = document.getElementById('options-menu');
+            
+            optionsButton.addEventListener('click', (event) => {
+                event.stopPropagation();
+                optionsMenu.classList.toggle('hidden');
+            });
+            
+            window.addEventListener('click', () => {
+                if (!optionsMenu.classList.contains('hidden')) {
+                    optionsMenu.classList.add('hidden');
+                }
+            });
+
+            // Get the new copy link button and existing share button
+            const copyLinkButton = document.getElementById('copy-link-button');
+            const shareButton = document.getElementById('share-button');
+            const toast = document.getElementById('toast');
+
+            function showToast(key) {
+                const lang = localStorage.getItem('language') || 'en';
+                toast.textContent = translations[key][lang];
+                toast.classList.remove('opacity-0');
+                setTimeout(() => { toast.classList.add('opacity-0'); }, 2000);
+            }
+            
+            // Event listener for the new Copy Link button
+            copyLinkButton.addEventListener('click', (event) => {
+                event.stopPropagation();
+                navigator.clipboard.writeText(window.location.href).then(() => {
+                    showToast('toastCopied');
+                }).catch(copyErr => {
+                    console.error('Failed to copy link: ', copyErr);
+                    showToast('toastCopyFailed');
+                });
+                optionsMenu.classList.add('hidden');
+            });
+
+            // Event listener for the Share Profile button
+            shareButton.addEventListener('click', async (event) => {
+                event.stopPropagation();
+                const lang = localStorage.getItem('language') || 'en';
+                const shareData = {
+                    title: translations.pageTitle[lang],
+                    text: 'Check out my digital business card!',
+                    url: window.location.href
+                };
+                
+                // Use the Web Share API if supported
+                if (navigator.share) {
+                    try {
+                        await navigator.share(shareData);
+                        showToast('toastShared');
+                    } catch (err) {
+                        // User cancelled the share, or another error occurred
+                        console.error('Share failed: ', err);
+                    }
+                } else {
+                    // Fallback to copying the link if Web Share API is not supported
+                    navigator.clipboard.writeText(window.location.href).then(() => {
+                        showToast('toastCopied');
+                    }).catch(copyErr => {
+                        console.error('Failed to copy link: ', copyErr);
+                        showToast('toastCopyFailed');
+                    });
+                }
+                optionsMenu.classList.add('hidden');
+            });
+
+            // --- INITIALIZATION ---
+            // 1. Set initial theme
+            const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            applyTheme(savedTheme);
+
+            // 2. Set initial language
+            const savedLang = localStorage.getItem('language') || 'en';
+            setLanguage(savedLang, true);
+
+            // 3. Start initial animations
+            const iphoneBezel = document.querySelector('.iphone-bezel');
+            setTimeout(() => {
+                iphoneBezel.classList.add('is-visible');
+            }, 100);
+            
+            animateIn(true); // Trigger initial page load animation
+        });
+    </script>
+
+</body>
+</html>
